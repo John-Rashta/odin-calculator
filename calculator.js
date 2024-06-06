@@ -19,9 +19,7 @@ function multiply(a, b) {
 }
 
 
-let firstNumber;
-let operatorSymbol;
-let secondNumber;
+
 
 
 function operate(first, second, operator) {
@@ -45,3 +43,30 @@ function operate(first, second, operator) {
             break;
     }
 }
+
+
+let firstNumber;
+let operatorSymbol;
+let secondNumber;
+let newNumber = true;
+
+const numberButtons = document.querySelector(".numbers");
+
+numberButtons.addEventListener("click", (event) => {
+
+    let target = event.target;
+
+    if (target.tagName === "BUTTON" && !target.classList.contains("decimal")) {
+
+        const display = document.querySelector(".currentDisplay");
+
+        if (newNumber) {
+
+            display.textContent = target.textContent;
+            newNumber = false;
+        } else {
+
+            display.textContent += target.textContent;
+        }
+    }
+});
