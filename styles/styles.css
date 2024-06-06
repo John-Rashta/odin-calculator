@@ -1,0 +1,80 @@
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.container {
+
+    display:flex;
+    flex-direction: column;
+    width: 400px;
+    height: 600px;
+    border: solid;
+}
+
+.displayScreen {
+    
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.buttons {
+    flex-grow: 3;
+    display: flex;
+    flex-direction: column;
+}
+
+.top {
+    display: flex;
+    flex-grow: 1;
+
+}
+
+.bot {
+    flex-grow: 4;
+    display: flex;
+}
+
+.numbers,
+.operators {
+
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: column;
+}
+
+.numbers {
+
+    flex: 4;
+}
+
+.rowNumber {
+    display: flex;
+}
+
+.top button,
+.rowNumber,
+.rowNumber button,
+.operators button,
+.operators {
+
+    flex: 1;
+}
+
+
+.history {
+    flex: 2;
+}
+
+.currentDisplay {
+    flex: 3;
+}
+
+
+
+
+
+

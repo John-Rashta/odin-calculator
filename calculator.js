@@ -36,7 +36,7 @@ function operate(first, second, operator) {
             subtract(first, second);
             break;
 
-        case "%":
+        case "/":
             divide(first, second);
             break;
 
