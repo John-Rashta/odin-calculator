@@ -45,6 +45,7 @@ function operate(first, second, operator) {
         case "/":
             return divide(first, second);
 
+        case "*":
         case "x":
             return multiply(first, second);
     }
@@ -100,39 +101,12 @@ function round(number) {
 
 }
 
+function numbersInput(content) {
 
-
-
-
-let firstNumber;
-let operatorSymbol;
-let secondNumber;
-let newNumber = true;
-let replaceOperator = false;
-
-const numberButtons = document.querySelector(".numbers");
-
-numberButtons.addEventListener("click", (event) => {
-
-    let target = event.target;
     const display = document.querySelector(".currentDisplay");
     
 
-    if (target.tagName === "BUTTON" && !target.classList.contains("decimal")) {
-
-
-        if (newNumber) {
-
-            display.textContent = target.textContent;
-            newNumber = false;
-            replaceOperator = false;
-        } else {
-
-            display.textContent += target.textContent;
-        }
-    }
-
-    if (target.classList.contains("decimal")) {
+    if (content === ".") {
 
         if (display.textContent.includes(".")) {
 
@@ -140,28 +114,68 @@ numberButtons.addEventListener("click", (event) => {
 
         } else if (display.textContent) {
 
-            display.textContent += target.textContent;
+            display.textContent += content;
         }
+    } else if (content.match(/\d/g)) {
 
 
+        if (newNumber) {
+
+            display.textContent = content;
+            newNumber = false;
+            replaceOperator = false;
+        } else {
+
+            display.textContent += content;
+        }
     }
-});
+}
 
-const operations = document.querySelector(".operators");
+function operatorInput(content) {
 
-operations.addEventListener("click", (event) => {
 
-    let target = event.target;
     const display = document.querySelector(".currentDisplay");
     const extra = document.querySelector(".history");
 
-    if (target.tagName === "BUTTON" && !target.classList.contains("operate")) {
+    
 
+    if (content === "=") {
+
+        if(!Number(firstNumber)) {
+
+            return;
+
+        }  else {
         
+            let first = Number(firstNumber);
+            let second = Number(display.textContent);
+
+            let result = operate(first, second, operatorSymbol);
+
+            if (result === "NO") {
+
+                return;
+            }
+
+            result = round(result);
+
+            extra.textContent = first + operatorSymbol + second + "=";
+
+            firstNumber = undefined;
+            operatorSymbol = undefined;
+            secondNumber = undefined;
+
+            display.textContent = result;
+
+            newNumber = true;
+
+        }
+    } else if (content.match(/[x+*/-]/g)) {
+
         if (replaceOperator) {
 
-            operatorSymbol = target.textContent;
-            extra.textContent = extra.textContent.slice(0, -1) + target.textContent;
+            operatorSymbol = content;
+            extra.textContent = extra.textContent.slice(0, -1) + content;
 
         } else if (!display.textContent) {
 
@@ -171,7 +185,7 @@ operations.addEventListener("click", (event) => {
         } else if (!Number(firstNumber)) {
 
             firstNumber = display.textContent;
-            operatorSymbol = target.textContent;
+            operatorSymbol = content;
             newNumber = true;
             replaceOperator = true;
             
@@ -198,7 +212,7 @@ operations.addEventListener("click", (event) => {
 
             second = undefined;
 
-            operatorSymbol = target.textContent;
+            operatorSymbol = content;
 
             newNumber = true;
             
@@ -207,63 +221,58 @@ operations.addEventListener("click", (event) => {
             extra.textContent = firstNumber + operatorSymbol;
 
         }
-
-
     }
+}
 
-    if (target.classList.contains("operate")) {
+let firstNumber;
+let operatorSymbol;
+let secondNumber;
+let newNumber = true;
+let replaceOperator = false;
 
-        if(!Number(firstNumber)) {
+const numberButtons = document.querySelector(".numbers");
 
-            return;
-        }  else {
-        
-            let first = Number(firstNumber);
-            let second = Number(display.textContent);
+numberButtons.addEventListener("click", (event) => numbersInput(event.target.textContent));
 
-            let result = operate(first, second, operatorSymbol);
+const operations = document.querySelector(".operators");
 
-            if (result === "NO") {
+operations.addEventListener("click", (event) => operatorInput(event.target.textContent));
 
-                return;
-            }
-
-            result = round(result);
-
-            extra.textContent = first + operatorSymbol + second + "=";
-
-            firstNumber = undefined;
-            operatorSymbol = undefined;
-            secondNumber = undefined;
-
-            display.textContent = result;
-
-            newNumber = true;
-
-        }
-    }
-});
-
-let clearButton = document.querySelector(".clear");
+const clearButton = document.querySelector(".clear");
 
 clearButton.addEventListener("click", clear);
 
-let backButton = document.querySelector(".back");
+document.addEventListener("mousedown", (event) => event.preventDefault());
+
+const backButton = document.querySelector(".back");
 
 backButton.addEventListener("click", backspace);
 
-/*
+
 document.addEventListener("keydown", (event) => {
 
-    if (event.key.match(/[\d*+-/=.]/g)) {
+    if (event.key.match(/[\d.]/g)) {
+
+
+        numbersInput(event.key);
+
+    } else if (event.key.match(/[x+*/=-]/g)) {
+
+
+        operatorInput(event.key);
 
 
     } else if (event.key === "Backspace") {
 
+
+        backspace();
+
     } else if (event.key === "Enter") {
 
 
-    }
-})
+        operatorInput("=");
 
-*/
+
+    }
+});
+
