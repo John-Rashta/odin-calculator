@@ -10,12 +10,17 @@ function subtract(a, b) {
 
 function divide(a, b) {
 
-    if (b === 0) {
-        alert("Do not divide by 0");
-        clear();
-    } else {
+
+        if (b === 0) {
+
+
+            alert("Can't divide by 0");
+            return "NO";
+
+        }
+
         return a / b;
-    }
+    
 }
 
 function multiply(a, b) {
@@ -54,9 +59,47 @@ function clear() {
     replaceOperator = false;
 
     const display = document.querySelector(".currentDisplay");
+    const extra = document.querySelector(".history");
     display.textContent = "";
+    extra.textContent = "";
+
 
 }
+
+function backspace() {
+
+    const display = document.querySelector(".currentDisplay");
+
+    if (display.textContent) {
+
+        display.textContent = display.textContent.slice(0,-1);
+    }
+
+    
+}
+
+function round(number) {
+
+    let stringNumber = number.toString();
+
+    if (!stringNumber.includes(".")) {
+
+        return number;
+    }
+
+    numberArray = stringNumber.split(".");
+    
+    if (numberArray[1].length < 5) {
+
+        return number;
+    } else {
+
+        return number.toFixed(4);
+    }
+
+
+}
+
 
 
 
@@ -73,6 +116,7 @@ numberButtons.addEventListener("click", (event) => {
 
     let target = event.target;
     const display = document.querySelector(".currentDisplay");
+    
 
     if (target.tagName === "BUTTON" && !target.classList.contains("decimal")) {
 
@@ -109,6 +153,7 @@ operations.addEventListener("click", (event) => {
 
     let target = event.target;
     const display = document.querySelector(".currentDisplay");
+    const extra = document.querySelector(".history");
 
     if (target.tagName === "BUTTON" && !target.classList.contains("operate")) {
 
@@ -116,18 +161,36 @@ operations.addEventListener("click", (event) => {
         if (replaceOperator) {
 
             operatorSymbol = target.textContent;
+            extra.textContent = extra.textContent.slice(0, -1) + target.textContent;
+
+        } else if (!display.textContent) {
+
+            return;
+
+
         } else if (!Number(firstNumber)) {
 
             firstNumber = display.textContent;
             operatorSymbol = target.textContent;
             newNumber = true;
             replaceOperator = true;
+            
+            extra.textContent = firstNumber + operatorSymbol;
+
         } else if (!Number(secondNumber)) {
 
             let first = Number(firstNumber);
             let second = Number(display.textContent);
 
             let result = operate(first, second, operatorSymbol);
+
+            if (result === "NO") {
+
+                clear();
+                return;
+            }
+
+            result = round(result);
 
             firstNumber = result;
 
@@ -141,6 +204,8 @@ operations.addEventListener("click", (event) => {
             
             replaceOperator = true;
 
+            extra.textContent = firstNumber + operatorSymbol;
+
         }
 
 
@@ -151,15 +216,21 @@ operations.addEventListener("click", (event) => {
         if(!Number(firstNumber)) {
 
             return;
-        } else if (newNumber) {
-
-            return;
-        } else {
+        }  else {
         
             let first = Number(firstNumber);
             let second = Number(display.textContent);
 
             let result = operate(first, second, operatorSymbol);
+
+            if (result === "NO") {
+
+                return;
+            }
+
+            result = round(result);
+
+            extra.textContent = first + operatorSymbol + second + "=";
 
             firstNumber = undefined;
             operatorSymbol = undefined;
@@ -168,6 +239,7 @@ operations.addEventListener("click", (event) => {
             display.textContent = result;
 
             newNumber = true;
+
         }
     }
 });
@@ -175,3 +247,23 @@ operations.addEventListener("click", (event) => {
 let clearButton = document.querySelector(".clear");
 
 clearButton.addEventListener("click", clear);
+
+let backButton = document.querySelector(".back");
+
+backButton.addEventListener("click", backspace);
+
+/*
+document.addEventListener("keydown", (event) => {
+
+    if (event.key.match(/[\d*+-/=.]/g)) {
+
+
+    } else if (event.key === "Backspace") {
+
+    } else if (event.key === "Enter") {
+
+
+    }
+})
+
+*/
