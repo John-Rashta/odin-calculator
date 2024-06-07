@@ -79,6 +79,28 @@ function backspace() {
     
 }
 
+function changeSign() {
+
+    const display = document.querySelector(".currentDisplay");
+    
+    //does nothing if its just a 0 otherwise it would break the calculator
+    if (!display.textContent || display.textContent === "0") {
+
+        return;
+
+    } else if (display.textContent.includes("-")) {
+
+        display.textContent = display.textContent.slice(1);
+
+    } else {
+
+        display.textContent = "-" +  display.textContent;
+
+    }
+
+
+}
+
 function round(number) {
 
     let stringNumber = number.toString();
@@ -251,6 +273,11 @@ document.addEventListener("mousedown", (event) => event.preventDefault());
 const backButton = document.querySelector(".back");
 //backspace incase of wrong number input
 backButton.addEventListener("click", backspace);
+
+const negativePositiveButton = document.querySelector(".negativePositive");
+
+//change number sign when clicked
+negativePositiveButton.addEventListener("click", changeSign);
 
 //keyboard support- digits, operators, backspace and enter
 document.addEventListener("keydown", (event) => {
