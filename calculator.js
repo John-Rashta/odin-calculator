@@ -82,14 +82,14 @@ function backspace() {
 function round(number) {
 
     let stringNumber = number.toString();
-
+    //if it has no decimal just return it
     if (!stringNumber.includes(".")) {
 
         return number;
     }
 
     numberArray = stringNumber.split(".");
-    
+    //if decimal length isnt big, just return it
     if (numberArray[1].length < 5) {
 
         return number;
@@ -151,9 +151,10 @@ function operatorInput(content) {
             let second = Number(display.textContent);
 
             let result = operate(first, second, operatorSymbol);
-
+            //checking if user is trying to divide by 0
             if (result === "NO") {
 
+                clear();
                 return;
             }
 
@@ -197,7 +198,7 @@ function operatorInput(content) {
             let second = Number(display.textContent);
 
             let result = operate(first, second, operatorSymbol);
-
+            //checking if user trying to divide by 0
             if (result === "NO") {
 
                 clear();
@@ -224,10 +225,13 @@ function operatorInput(content) {
     }
 }
 
+
 let firstNumber;
 let operatorSymbol;
 let secondNumber;
+//controls if a number input replaces display or adds to it
 let newNumber = true;
+//replaces the current operator when an operator is pressed right after another
 let replaceOperator = false;
 
 const numberButtons = document.querySelector(".numbers");
@@ -241,14 +245,14 @@ operations.addEventListener("click", (event) => operatorInput(event.target.textC
 const clearButton = document.querySelector(".clear");
 
 clearButton.addEventListener("click", clear);
-
+//removing the focus that happens when a button is clicked- makes it weird to go between mouse and keyboard
 document.addEventListener("mousedown", (event) => event.preventDefault());
 
 const backButton = document.querySelector(".back");
-
+//backspace incase of wrong number input
 backButton.addEventListener("click", backspace);
 
-
+//keyboard support- digits, operators, backspace and enter
 document.addEventListener("keydown", (event) => {
 
     if (event.key.match(/[\d.]/g)) {
@@ -273,6 +277,9 @@ document.addEventListener("keydown", (event) => {
         operatorInput("=");
 
 
+    } else if (event.key === "c") {
+
+        clear();
     }
 });
 
